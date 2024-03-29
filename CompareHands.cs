@@ -18,13 +18,9 @@ namespace CardGame
                     {
                         return hand;
                     }
-                    else
-                    {
-                        return CompareHighestCard(hand1, hand2);
-                    }
                 }
             }
-            return null;
+            return CompareHighestCard(hand1, hand2);
         }
 
         public static Hand CompareHighestCard(Hand hand1, Hand hand2)
