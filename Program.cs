@@ -12,29 +12,36 @@ using CardGame;
             {
                 // Create a new deck of cards
                 DeckOfCards deck = new DeckOfCards();
+                Console.WriteLine("Deck created and shuffled.");
 
                 // Deal two hands
                 Hand hand1 = deck.DealHand();
                 Hand hand2 = deck.DealHand();
+                Console.WriteLine("Hands dealt.");
 
                 // Compare hands to determine the winner
                 Hand winner = CompareHands.CheckHands(hand1, hand2);
+                Console.WriteLine("Hand 1: " + hand1);
+                Console.WriteLine("Hand 2: " + hand2);
+                Console.WriteLine(CompareHands.CheckHands(hand1, hand2));
+                Console.WriteLine(winner == hand1 ? "Hand 1 wins!" : winner == hand2 ? "Hand 2 wins!" : "It's a tie!");
 
-                // Print the result
-                if (winner == null)
-                {
-                    Console.WriteLine("It's a tie!");
-                    Console.WriteLine(hand1); Console.WriteLine(hand2);
-                }
-                else
-                {
-                    Console.WriteLine($"Hand {(winner == hand1 ? "1" : "2")} wins!");
-                    
-                    Console.WriteLine(winner);
-                }
-                Console.WriteLine("Press Enter to play again, or any other key to exit.");
+            // Print the result
+            /*if (winner == null)
+            {
+                Console.WriteLine("It's a tie!");
+                Console.WriteLine(hand1); Console.WriteLine(hand2);
+            }
+            else
+            {
+                Console.WriteLine($"Hand {(winner == hand1 ? "1" : "2")} wins!");
+
+                Console.WriteLine(winner);
+            }*/
+            Console.WriteLine("Press Enter to play again, or any other key to exit.");
                 if (Console.ReadKey().Key != ConsoleKey.Enter)
                 {
+                    Console.WriteLine("Thanks for playing!");
                     break;
                 }
             }
