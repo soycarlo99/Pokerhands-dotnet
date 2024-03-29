@@ -5,100 +5,144 @@ namespace CardGame
 {
     public class CompareHands
     {
+
+        public static Hand CheckHands(Hand hand1, Hand hand2)
+        {
+            var hands = new[] { hand1, hand2 };
+            var methods = new Func<Hand, Hand>[] { IsRoyalFlush, IsStraightFlush, IsFourOfAKind, IsFullHouse, IsFlush, IsStraight, IsThreeOfAKind, IsTwoPair, IsPair };
+            foreach (var method in methods)
+            {
+                foreach (var hand in hands)
+                {
+                    if (method(hand) != null)
+                    {
+                        return hand;
+                    }
+                    else
+                    {
+                        return CompareHighestCard(hand1, hand2);
+                    }
+                }
+            }
+            return null;
+        }
+
         public static Hand CompareHighestCard(Hand hand1, Hand hand2)
         {
-            // Get the highest cards from each hand
-            Card highestCardHand1 = hand1.Cards.OrderByDescending(card => card.Rank).First();
-            Card highestCardHand2 = hand2.Cards.OrderByDescending(card => card.Rank).First();
-
-            // Compare the ranks of the highest cards
-            int comparison = highestCardHand1.Rank.CompareTo(highestCardHand2.Rank);
-
-            if (comparison == 0)
-            {  
-                // If ranks are equal, return null to indicate a tie
-                return null;
-            }
-            else if (comparison > 0)
+            var ranks = "23456789TJQKA";
+            var sorted1 = hand1.Cards.OrderBy(c => ranks.IndexOf(c.Rank)).ToList();
+            var sorted2 = hand2.Cards.OrderBy(c => ranks.IndexOf(c.Rank)).ToList();
+            for (var i = 4; i >= 0; i--)
             {
-                // If the rank of the highest card in hand1 is greater, hand1 wins
-                return hand1;
-            }
-            else
-            {
-                // If the rank of the highest card in hand2 is greater, hand2 wins
-                return hand2;
-            }
-        }
-        public static Hand CompareOnePair(Hand hand1, Hand hand2)
-        {
-            bool hasOnePair1 = HasOnePair(hand1);
-            bool hasOnePair2 = HasOnePair(hand2);
-
-            if (hasOnePair1 && !hasOnePair2)
-            {
-                return hand1; // Hand 1 has one pair but Hand 2 does not
-            }
-            else if (!hasOnePair1 && hasOnePair2)
-            {
-                return hand2; // Hand 2 has one pair but Hand 1 does not
-            }
-            else if (hasOnePair1 && hasOnePair2)
-            {
-                // Both hands have one pair, compare the ranks of the pairs
-                Card pair1 = GetPair(hand1);
-                Card pair2 = GetPair(hand2);
-
-                int comparison = pair1.Rank.CompareTo(pair2.Rank);
-
-                if (comparison == 0)
+                if (ranks.IndexOf(sorted1[i].Rank) > ranks.IndexOf(sorted2[i].Rank))
                 {
-                    // If ranks of pairs are equal, compare highest non-pair card
-                    Hand remainingHand1 = RemovePair(hand1);
-                    Hand remainingHand2 = RemovePair(hand2);
-                    return CompareHighestCard(remainingHand1, remainingHand2);
+                    return hand1;
                 }
-                else if (comparison > 0)
+                if (ranks.IndexOf(sorted1[i].Rank) < ranks.IndexOf(sorted2[i].Rank))
                 {
-                    return hand1; // Pair in Hand 1 has higher rank
-                }
-                else
-                {
-                    return hand2; // Pair in Hand 2 has higher rank
+                    return hand2;
                 }
             }
-            else
+            return null;
+        }
+
+        public static Hand IsPair(Hand hand)
+        {
+            foreach (var card in hand.Cards)
             {
-                return null; // Neither hand has one pair
+                if (hand.Cards.Count(c => c.Rank == card.Rank) == 2)
+                {
+                    return hand;
+                }
             }
+            return null;
         }
-
-        private static bool HasOnePair(Hand hand)
+        
+        public static Hand IsTwoPair(Hand hand)
         {
-            var groups = hand.Cards.GroupBy(card => card.Rank);
-            return groups.Any(group => group.Count() == 2);
-        }
-
-        private static Card GetPair(Hand hand)
-        {
-            var groups = hand.Cards.GroupBy(card => card.Rank);
-            var pairGroup = groups.FirstOrDefault(group => group.Count() == 2);
-
-            if (pairGroup != null)
+            var pairs = 0;
+            foreach (var card in hand.Cards)
             {
-                // Select the first card from the group representing the pair
-                return pairGroup.First();
+                if (hand.Cards.Count(c => c.Rank == card.Rank) == 2)
+                {
+                    pairs++;
+                }
             }
-
-            return null; // No pair found
+            return pairs == 2 ? hand : null;
         }
 
-        private static Hand RemovePair(Hand hand)
+        public static Hand IsThreeOfAKind(Hand hand)
         {
-            var groups = hand.Cards.GroupBy(card => card.Rank);
-            var nonPairCards = groups.Where(group => group.Count() != 2).SelectMany(group => group).ToArray();
-            return new Hand(nonPairCards.ToList());
+            foreach (var card in hand.Cards)
+            {
+                if (hand.Cards.Count(c => c.Rank == card.Rank) == 3)
+                {
+                    return hand;
+                }
+            }
+            return null;
         }
 
+        public static Hand IsStraight(Hand hand)
+        {
+            var ranks = "23456789TJQKA";
+            var sorted = hand.Cards.OrderBy(c => ranks.IndexOf(c.Rank)).ToList();
+            for (var i = 0; i < sorted.Count - 1; i++)
+            {
+                if (ranks.IndexOf(sorted[i + 1].Rank) - ranks.IndexOf(sorted[i].Rank) != 1)
+                {
+                    return null;
+                }
+            }
+            return hand;
+        }
+
+        public static Hand IsFlush(Hand hand)
+        {
+            foreach (var card in hand.Cards)
+            {
+                if (hand.Cards.Count(c => c.Suit == card.Suit) == 5)
+                {
+                    return hand;
+                }
+            }
+            return null;
+        }
+
+        public static Hand IsFullHouse(Hand hand)
+        {
+            return IsPair(hand) != null && IsThreeOfAKind(hand) != null ? hand : null;
+        }
+
+        public static Hand IsFourOfAKind(Hand hand)
+        {
+            foreach (var card in hand.Cards)
+            {
+                if (hand.Cards.Count(c => c.Rank == card.Rank) == 4)
+                {
+                    return hand;
+                }
+            }
+            return null;
+        }
+
+        public static Hand IsStraightFlush(Hand hand)
+        {
+            return IsStraight(hand) != null && IsFlush(hand) != null ? hand : null;
+        }
+
+        public static Hand IsRoyalFlush(Hand hand)
+        {
+            var ranks = "TJQKA";
+            var sorted = hand.Cards.OrderBy(c => ranks.IndexOf(c.Rank)).ToList();
+            for (var i = 0; i < sorted.Count; i++)
+            {
+                if (sorted[i].Rank != ranks[i])
+                {
+                    return null;
+                }
+            }
+            return hand;
+        }
     }
 }

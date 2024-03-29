@@ -1,8 +1,7 @@
 ﻿// Pokerhands Program for unit testing purposes
 
 using System;
-
-namespace CardGame;
+using CardGame;
 
     class Program
     {
@@ -18,8 +17,8 @@ namespace CardGame;
                 Hand hand1 = deck.DealHand();
                 Hand hand2 = deck.DealHand();
 
-                // Compare the highest card of each hand
-                Hand winner = CompareHands.CompareHighestCard(hand1, hand2);
+                // Compare hands to determine the winner
+                Hand winner = CompareHands.CheckHands(hand1, hand2);
 
                 // Print the result
                 if (winner == null)
@@ -30,6 +29,7 @@ namespace CardGame;
                 else
                 {
                     Console.WriteLine($"Hand {(winner == hand1 ? "1" : "2")} wins!");
+                    
                     Console.WriteLine(winner);
                 }
                 Console.WriteLine("Press Enter to play again, or any other key to exit.");
