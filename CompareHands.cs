@@ -6,7 +6,9 @@ namespace CardGame
     public class CompareHands
     {
 
-        public static Hand CheckHands(Hand hand1, Hand hand2)
+        // SHOULD PROBABLY BE REFACTORED TO USE A POINT SYSTEM TO DETERMINE WINNER INSTEAD OF STRING COMPARISON - TODO - THINK ABOUT THIS
+
+        public static (Hand winningHand, string handType) CheckHands(Hand hand1, Hand hand2)
         {
             var hands = new[] { hand1, hand2 };
             var methods = new Func<Hand, Hand>[] { IsRoyalFlush, IsStraightFlush, IsFourOfAKind, IsFullHouse, IsFlush, IsStraight, IsThreeOfAKind, IsTwoPair, IsPair };
@@ -16,12 +18,61 @@ namespace CardGame
                 {
                     if (method(hand) != null)
                     {
-                        return hand;
+                        return (hand, GetHandType(method));
                     }
                 }
             }
-            return CompareHighestCard(hand1, hand2);
+            return (CompareHighestCard(hand1, hand2), "High Card"); // No special hand, highest card wins
         }
+
+        private static string GetHandType(Func<Hand, Hand> method)
+        {
+            if (method == IsRoyalStraightFlush)
+            {
+                return "Royal Straight Flush";
+            }
+            else if (method == IsRoyalFlush)
+            {
+                return "Royal Flush";
+            }
+            else if (method == IsStraightFlush)
+            {
+                return "Straight Flush";
+            }
+            else if (method == IsFourOfAKind)
+            {
+                return "Four of a Kind";
+            }
+            else if (method == IsFullHouse)
+            {
+                return "Full House";
+            }
+            else if (method == IsFlush)
+            {
+                return "Flush";
+            }
+            else if (method == IsStraight)
+            {
+                return "Straight";
+            }
+            else if (method == IsThreeOfAKind)
+            {
+                return "Three of a Kind";
+            }
+            else if (method == IsTwoPair)
+            {
+                return "Two Pair";
+            }
+            else if (method == IsPair)
+            {
+                return "Pair";
+            }
+            else
+            {
+                return "Unknown"; // Should never happen
+            }
+        }
+
 
         public static Hand CompareHighestCard(Hand hand1, Hand hand2)
         {
@@ -54,6 +105,7 @@ namespace CardGame
             return null;
         }
         
+        // At this moment this method is broken. It returns two pairs if there is one pair in each hand....TODO NEEDS FIX
         public static Hand IsTwoPair(Hand hand)
         {
             var pairs = 0;
@@ -63,8 +115,12 @@ namespace CardGame
                 {
                     pairs++;
                 }
+                if (pairs == 2)
+                {
+                    return hand;
+                }
             }
-            return pairs == 2 ? hand : null;
+            return null;
         }
 
         public static Hand IsThreeOfAKind(Hand hand)
@@ -129,6 +185,10 @@ namespace CardGame
 
         public static Hand IsRoyalFlush(Hand hand)
         {
+            if (IsFlush(hand) == null)
+            {
+                return null;
+            }
             var ranks = "TJQKA";
             var sorted = hand.Cards.OrderBy(c => ranks.IndexOf(c.Rank)).ToList();
             for (var i = 0; i < sorted.Count; i++)
@@ -139,6 +199,11 @@ namespace CardGame
                 }
             }
             return hand;
+        }
+
+        public static Hand IsRoyalStraightFlush(Hand hand)
+        {
+            return IsRoyalFlush(hand) != null && IsStraightFlush(hand) != null ? hand : null;
         }
     }
 }
