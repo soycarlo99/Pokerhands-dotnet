@@ -106,18 +106,28 @@ namespace CardGame
         }
         
         // At this moment this method is broken. It returns two pairs if there is one pair in each hand....TODO NEEDS FIX
+        // This is kinda working now...
         public static Hand IsTwoPair(Hand hand)
         {
-            var pairs = 0;
+            var pair1 = 0;
+            var pair2 = 0;
             foreach (var card in hand.Cards)
             {
                 if (hand.Cards.Count(c => c.Rank == card.Rank) == 2)
                 {
-                    pairs++;
-                }
-                if (pairs == 2)
-                {
-                    return hand;
+                    if (pair1 == 0)
+                    {
+                        pair1 = card.Rank;
+                    }
+                    else if (pair2 == 0 && card.Rank != pair1)
+                    {
+                        pair2 = card.Rank;
+                    }
+
+                    if (pair1 != 0 && pair2 != 0)
+                    {
+                        return hand;
+                    }
                 }
             }
             return null;
