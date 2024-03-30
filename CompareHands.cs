@@ -25,6 +25,7 @@ namespace CardGame
             return (CompareHighestCard(hand1, hand2), "High Card"); // No special hand, highest card wins
         }
 
+        // This is a helper method to get the hand type as a string
         private static string GetHandType(Func<Hand, Hand> method)
         {
             if (method == IsRoyalStraightFlush)
@@ -73,7 +74,7 @@ namespace CardGame
             }
         }
 
-
+        // This is a helper method to compare the highest card in each hand
         public static Hand CompareHighestCard(Hand hand1, Hand hand2)
         {
             var ranks = "23456789TJQKA";
@@ -93,6 +94,7 @@ namespace CardGame
             return null;
         }
 
+        // Method to check if a hand is a pair
         public static Hand IsPair(Hand hand)
         {
             foreach (var card in hand.Cards)
@@ -133,6 +135,7 @@ namespace CardGame
             return null;
         }
 
+        // Method to check if a hand is three of a kind
         public static Hand IsThreeOfAKind(Hand hand)
         {
             foreach (var card in hand.Cards)
@@ -145,6 +148,7 @@ namespace CardGame
             return null;
         }
 
+        // Method to check if a hand is a straight
         public static Hand IsStraight(Hand hand)
         {
             var ranks = "23456789TJQKA";
@@ -159,6 +163,7 @@ namespace CardGame
             return hand;
         }
 
+        // Method to check if a hand is a flush
         public static Hand IsFlush(Hand hand)
         {
             foreach (var card in hand.Cards)
@@ -171,6 +176,7 @@ namespace CardGame
             return null;
         }
 
+        // Method to check if a hand is a full house
         public static Hand IsFullHouse(Hand hand)
         {
             return IsPair(hand) != null && IsThreeOfAKind(hand) != null ? hand : null;
@@ -188,11 +194,13 @@ namespace CardGame
             return null;
         }
 
+        // Method to check if a hand is a straight flush
         public static Hand IsStraightFlush(Hand hand)
         {
             return IsStraight(hand) != null && IsFlush(hand) != null ? hand : null;
         }
 
+        // Need to fix this method - TODO
         public static Hand IsRoyalFlush(Hand hand)
         {
             if (IsFlush(hand) == null)
@@ -211,6 +219,7 @@ namespace CardGame
             return hand;
         }
 
+        // Need to fix this method - TODO
         public static Hand IsRoyalStraightFlush(Hand hand)
         {
             return IsRoyalFlush(hand) != null && IsStraightFlush(hand) != null ? hand : null;
