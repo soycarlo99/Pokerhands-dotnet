@@ -91,7 +91,7 @@ namespace CardGame
                     return hand2;
                 }
             }
-            return null;
+            return null!;
         }
 
         // Method to check if a hand is a pair
@@ -104,9 +104,9 @@ namespace CardGame
                     return hand;
                 }
             }
-            return null;
+            return null!;
         }
-        
+
         // At this moment this method is broken. It returns two pairs if there is one pair in each hand....TODO NEEDS FIX
         // This is kinda working now...
         public static Hand IsTwoPair(Hand hand)
@@ -132,7 +132,7 @@ namespace CardGame
                     }
                 }
             }
-            return null;
+            return null!;
         }
 
         // Method to check if a hand is three of a kind
@@ -145,7 +145,7 @@ namespace CardGame
                     return hand;
                 }
             }
-            return null;
+            return null!;
         }
 
         // Method to check if a hand is a straight
@@ -157,7 +157,7 @@ namespace CardGame
             {
                 if (ranks.IndexOf(sorted[i + 1].Rank) - ranks.IndexOf(sorted[i].Rank) != 1)
                 {
-                    return null;
+                    return null!;
                 }
             }
             return hand;
@@ -173,13 +173,13 @@ namespace CardGame
                     return hand;
                 }
             }
-            return null;
+            return null!;
         }
 
         // Method to check if a hand is a full house
         public static Hand IsFullHouse(Hand hand)
         {
-            return IsPair(hand) != null && IsThreeOfAKind(hand) != null ? hand : null;
+            return IsPair(hand) != null && IsThreeOfAKind(hand) != null ? hand : null!;
         }
 
         public static Hand IsFourOfAKind(Hand hand)
@@ -191,13 +191,13 @@ namespace CardGame
                     return hand;
                 }
             }
-            return null;
+            return null!;
         }
 
         // Method to check if a hand is a straight flush
         public static Hand IsStraightFlush(Hand hand)
         {
-            return IsStraight(hand) != null && IsFlush(hand) != null ? hand : null;
+            return IsStraight(hand) != null && IsFlush(hand) != null ? hand : null!;
         }
 
         // Need to fix this method - TODO
@@ -205,7 +205,7 @@ namespace CardGame
         {
             if (IsFlush(hand) == null)
             {
-                return null;
+                return null!;
             }
             var ranks = "TJQKA";
             var sorted = hand.Cards.OrderBy(c => ranks.IndexOf(c.Rank)).ToList();
@@ -213,7 +213,7 @@ namespace CardGame
             {
                 if (sorted[i].Rank != ranks[i])
                 {
-                    return null;
+                    return null!;
                 }
             }
             return hand;
@@ -222,7 +222,7 @@ namespace CardGame
         // Need to fix this method - TODO
         public static Hand IsRoyalStraightFlush(Hand hand)
         {
-            return IsRoyalFlush(hand) != null && IsStraightFlush(hand) != null ? hand : null;
+            return IsRoyalFlush(hand) != null && IsStraightFlush(hand) != null ? hand : null!;
         }
     }
 }
