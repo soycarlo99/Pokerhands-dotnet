@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Text.RegularExpressions;
 
 namespace CardGame
 {
@@ -18,7 +17,10 @@ namespace CardGame
                 {
                     if (method(hand) != null)
                     {
-                        return (hand, GetHandType(method));
+                        var handType = Regex.Replace(
+                                method.Method.Name[2..], @"([A-Z])", " $1"
+                            )[1..].Replace("Of A", "of a");
+                        return (hand, handType);
                     }
                 }
             }
@@ -26,7 +28,7 @@ namespace CardGame
         }
 
         // This is a helper method to get the hand type as a string
-        private static string GetHandType(Func<Hand, Hand> method)
+        /*private static string GetHandType(Func<Hand, Hand> method)
         {
             if (method == IsRoyalStraightFlush)
             {
@@ -72,7 +74,7 @@ namespace CardGame
             {
                 return "Unknown"; // Should never happen
             }
-        }
+    }*/
 
         // This is a helper method to compare the highest card in each hand
         public static Hand CompareHighestCard(Hand hand1, Hand hand2)
