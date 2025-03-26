@@ -21,7 +21,6 @@ namespace CardGame
 
         public static (Hand winningHand, string handType) CheckHands(Hand hand1, Hand hand2)
         {
-            var hands = new[] { hand1, hand2 };
             var methods = new Func<Hand, (Hand hand, string handType)>[]
             {
                 IsRoyalStraightFlush, IsRoyalFlush, IsStraightFlush, IsFourOfAKind, IsFullHouse,
@@ -45,7 +44,7 @@ namespace CardGame
                     }
                     else
                     {
-                        return (CompareSameTypeHands(hand1, hand2, hand1Result.handType), hand1Result.handType);
+                        return (CompareSameTypeHands(hand1, hand2), hand1Result.handType);
                     }
                 }
                 else if (hand1Result.hand != null)
@@ -60,7 +59,7 @@ namespace CardGame
             return (CompareHighestCard(hand1, hand2), "High Card"); // No special hand, highest card wins
         }
 
-        private static Hand CompareSameTypeHands(Hand hand1, Hand hand2, string handType)
+        private static Hand CompareSameTypeHands(Hand hand1, Hand hand2)
         {
             var ranks = "23456789TJQKA";
             var sorted1 = hand1.Cards.OrderBy(c => ranks.IndexOf(c.Rank)).ToList();
