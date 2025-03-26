@@ -2,7 +2,7 @@
 
 namespace CardGame
 {
-    public class CompareHands
+    public static class CompareHands
     {
         private static readonly Dictionary<string, int> HandPoints = new Dictionary<string, int>
         {
