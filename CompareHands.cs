@@ -1,6 +1,4 @@
-﻿using System.Text.RegularExpressions;
-
-namespace CardGame
+﻿namespace CardGame
 {
     public static class CompareHands
     {
