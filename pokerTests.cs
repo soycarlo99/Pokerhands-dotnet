@@ -20,10 +20,11 @@ public class PokerHandTests
             }
         );
         // Act
-        Hand result = CompareHands.IsThreeOfAKind(threeOfAKindHand);
+        var (result, handType) = CompareHands.IsThreeOfAKind(threeOfAKindHand);
 
         // Assert
         Assert.Equal(threeOfAKindHand, result);
+        Assert.Equal("Three of a Kind", handType);
     }
 
     [Fact]
@@ -41,10 +42,11 @@ public class PokerHandTests
         );
 
         // Act
-        Hand result = CompareHands.IsThreeOfAKind(pairHand);
+        var (result, handType) = CompareHands.IsThreeOfAKind(pairHand);
 
         // Assert
         Assert.Null(result);
+        Assert.Null(handType);
     }
 
     [Fact]
@@ -62,10 +64,11 @@ public class PokerHandTests
         );
 
         // Act
-        Hand result = CompareHands.IsPair(pairHand);
+        var (result, handType) = CompareHands.IsPair(pairHand);
 
         // Assert
         Assert.Equal(pairHand, result);
+        Assert.Equal("Pair", handType);
     }
 
     [Fact]
@@ -83,10 +86,11 @@ public class PokerHandTests
         );
 
         // Act
-        Hand result = CompareHands.IsPair(NonPairHand);
+        var (result, handType) = CompareHands.IsPair(NonPairHand);
 
         // Assert
         Assert.Null(result);
+        Assert.Null(handType);
     }
 
     [Fact]
@@ -104,10 +108,11 @@ public class PokerHandTests
         );
 
         // Act
-        Hand result = CompareHands.IsPair(invalidHand);
+        var (result, handType) = CompareHands.IsPair(invalidHand);
 
         // Assert
         Assert.Null(result);
+        Assert.Null(handType);
     }
 
     [Fact]
@@ -125,10 +130,11 @@ public class PokerHandTests
         );
 
         // Act
-        Hand result = CompareHands.IsPair(invalidHand);
+        var (result, handType) = CompareHands.IsPair(invalidHand);
 
         // Assert
         Assert.Null(result);
+        Assert.Null(handType);
     }
 
     [Fact]
@@ -216,10 +222,11 @@ public class PokerHandTests
         );
 
         // Act
-        var result = CompareHands.IsStraight(impossibleHand);
+        var (result, handType) = CompareHands.IsStraight(impossibleHand);
 
         // Assert
         Assert.Null(result);
+        Assert.Null(handType);
     }
 
     [Fact]
